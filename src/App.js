@@ -1,23 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+
+const frutas = [
+  "pessego",
+  "tomate",
+  "banana",
+  "abacate",
+  "pera",
+  "maçã",
+  "pera",
+];
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {/* <Contador unidadePorClique={3} /> */}
+
+      <ol>
+        {/* {[<li>pessego</li>, <li>tomate</li>, <li>banana</li>, <li>abacate</li>]} */}
+        {frutas.map((fruta, index) => (
+          <li key={index}>{fruta}</li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+// 1. estado -> statefull -> com estado
+// 2. props -> stateless (exibicional) -> sem estado
+function Contador(props) {
+  // props.unidadePorClique
+  const [contador, setContador] = useState(0);
+
+  const subtrair = () => {
+    setContador(contador - props.unidadePorClique);
+    console.log(contador);
+  };
+
+  const adicionar = () => {
+    setContador(contador + props.unidadePorClique);
+    console.log(contador);
+  };
+
+  return (
+    <div>
+      <button onClick={subtrair}>-</button>
+      <span>{contador}</span>
+      <button onClick={adicionar}>+</button>
     </div>
   );
 }

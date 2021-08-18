@@ -19,7 +19,12 @@ function App() {
     // .push(<Contador />) -> altera o array original
     // .concat(<Contador />) -> nao altera o array original
     // setContadores()
-    setContadores((contadoresAtuais) => contadoresAtuais.concat(Contador));
+    setContadores((contadoresAtuais) =>
+      contadoresAtuais.concat({
+        component: Contador,
+        id: new Date().getTime(),
+      })
+    );
   };
 
   /**
@@ -56,14 +61,18 @@ function App() {
         Adicionar contador
       </button>
       {/* {contadores.map((contador) => contador)} */}
-      {contadores.map((ContadorRenderizado, index) => (
-        <ContadorRenderizado
-          key={index}
-          unidadePorClique={unidadePorClique}
-          onDelete={removerContador}
-          index={index}
-        />
-      ))}
+      {contadores.map((elemento, index) => {
+        const Component = elemento.component;
+
+        return (
+          <Component
+            key={elemento.id}
+            unidadePorClique={unidadePorClique}
+            onDelete={removerContador}
+            index={index}
+          />
+        );
+      })}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Contador from "./Contador/Contador";
 
 function App() {
   /**
@@ -9,6 +10,7 @@ function App() {
 
   // -> essa é a abordagem por array
   const [contadores, setContadores] = useState([]);
+  const [unidadePorClique, setUnidadePorClique] = useState(1);
 
   // -> implementar abordagem por numero
   // const [quantidadeContres, setQuantidadeContadores] = useState(0)
@@ -24,39 +26,44 @@ function App() {
    * [function() {}, function(){}]
    */
 
+  const nomeDaClasse = "button";
+
+  // addEventListener('onChange', function(event) { event.target.value })
+  const handleOnChange = (event) => {
+    // console.log(event.target.value);
+    // Number(), parseInt(), +event.target.value
+    setUnidadePorClique(Number(event.target.value));
+  };
+
+  // ESSA EH A FUNCAO QUE VOU PASSAR PARA O CONTADOR
+  const removerContador = (indexDoContador) => {
+    console.log(`opa, bora remover esse contador ${indexDoContador}`);
+
+    // recebe o estado
+    // retorna o novo
+    setContadores((contadores) => {
+      // @todo consertar esse daqui
+      return contadores.filter((contador, index) => index !== indexDoContador);
+    });
+  };
+
   return (
     <div>
-      <button onClick={adicionarContador}>Adicionar contador</button>
+      <label htmlFor="unidadePorClique">Unidade</label>
+      <input id="unidadePorClique" type="text" onChange={handleOnChange} />
+
+      <button className={nomeDaClasse} onClick={adicionarContador}>
+        Adicionar contador
+      </button>
       {/* {contadores.map((contador) => contador)} */}
       {contadores.map((ContadorRenderizado, index) => (
-        <ContadorRenderizado key={index} unidadePorClique={2} />
+        <ContadorRenderizado
+          key={index}
+          unidadePorClique={unidadePorClique}
+          onDelete={removerContador}
+          index={index}
+        />
       ))}
-    </div>
-  );
-}
-
-// 1. estado -> statefull -> com estado
-// 2. props -> stateless (exibicional) -> sem estado
-function Contador(props) {
-  // props.unidadePorClique
-  const [contador, setContador] = useState(0);
-
-  const subtrair = () => {
-    // setContador(contador - props.unidadePorClique);
-    setContador((prevState) => prevState - props.unidadePorClique);
-    console.log(contador);
-  };
-
-  const adicionar = () => {
-    setContador(contador + props.unidadePorClique);
-    console.log(contador);
-  };
-
-  return (
-    <div>
-      <button onClick={subtrair}>-</button>
-      <span>{contador}</span>
-      <button onClick={adicionar}>+</button>
     </div>
   );
 }

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { fireEvent } from "@testing-library/react";
+import { useState, useMemo } from "react";
 import Contador from "./Contador/Contador";
 
 function App() {
@@ -9,7 +10,7 @@ function App() {
    */
 
   // -> essa é a abordagem por array
-  const [contadores, setContadores] = useState([]);
+  const [quantidadeContadores, setQuantidadeContadores] = useState(0);
   const [unidadePorClique, setUnidadePorClique] = useState(1);
 
   // -> implementar abordagem por numero
@@ -19,7 +20,7 @@ function App() {
     // .push(<Contador />) -> altera o array original
     // .concat(<Contador />) -> nao altera o array original
     // setContadores()
-    setContadores((contadoresAtuais) => contadoresAtuais.concat(Contador));
+    setQuantidadeContadores((prevState) => prevState + 1);
   };
 
   /**
@@ -37,15 +38,27 @@ function App() {
 
   // ESSA EH A FUNCAO QUE VOU PASSAR PARA O CONTADOR
   const removerContador = (indexDoContador) => {
-    console.log(`opa, bora remover esse contador ${indexDoContador}`);
-
-    // recebe o estado
-    // retorna o novo
-    setContadores((contadores) => {
-      // @todo consertar esse daqui
-      return contadores.filter((contador, index) => index !== indexDoContador);
-    });
+    // aqui nao da pra fazer pq voce nao sabe qual contador que é ):
+    // voce soh sabe quantos tem
   };
+
+  // esse useMemo é um carinha especial que eu vou explicar depois :p
+  const Contadores = useMemo(() => {
+    const contadoresRender = [];
+
+    for (let index = 0; index < quantidadeContadores; index += 1) {
+      contadoresRender.push(
+        <Contador
+          key={index}
+          unidadePorClique={unidadePorClique}
+          onDelete={removerContador}
+          index={index}
+        />
+      );
+    }
+
+    return contadoresRender;
+  }, [quantidadeContadores, removerContador, unidadePorClique]);
 
   return (
     <div>
@@ -55,15 +68,7 @@ function App() {
       <button className={nomeDaClasse} onClick={adicionarContador}>
         Adicionar contador
       </button>
-      {/* {contadores.map((contador) => contador)} */}
-      {contadores.map((ContadorRenderizado, index) => (
-        <ContadorRenderizado
-          key={index}
-          unidadePorClique={unidadePorClique}
-          onDelete={removerContador}
-          index={index}
-        />
-      ))}
+      {Contadores}
     </div>
   );
 }

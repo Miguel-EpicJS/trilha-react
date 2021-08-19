@@ -10,6 +10,8 @@ function App() {
 
   // -> essa é a abordagem por array
   const [contadores, setContadores] = useState([]);
+  // fazer uma lista de identificadores
+  // [131231221421312312, 387263187631287362, 329863127836232]
   const [unidadePorClique, setUnidadePorClique] = useState(1);
 
   // -> implementar abordagem por numero
@@ -19,7 +21,9 @@ function App() {
     // .push(<Contador />) -> altera o array original
     // .concat(<Contador />) -> nao altera o array original
     // setContadores()
-    setContadores((contadoresAtuais) => contadoresAtuais.concat(Contador));
+    setContadores((contadoresAtuais) =>
+      contadoresAtuais.concat(new Date().getTime())
+    );
   };
 
   /**
@@ -36,14 +40,14 @@ function App() {
   };
 
   // ESSA EH A FUNCAO QUE VOU PASSAR PARA O CONTADOR
-  const removerContador = (indexDoContador) => {
-    console.log(`opa, bora remover esse contador ${indexDoContador}`);
+  const removerContador = (idContador) => {
+    console.log(`opa, bora remover esse contador ${idContador}`);
 
     // recebe o estado
     // retorna o novo
+
     setContadores((contadores) => {
-      // @todo consertar esse daqui
-      return contadores.filter((contador, index) => index !== indexDoContador);
+      return contadores.filter((id) => id !== idContador);
     });
   };
 
@@ -56,12 +60,12 @@ function App() {
         Adicionar contador
       </button>
       {/* {contadores.map((contador) => contador)} */}
-      {contadores.map((ContadorRenderizado, index) => (
-        <ContadorRenderizado
-          key={index}
+      {contadores.map((id) => (
+        <Contador
+          key={id}
           unidadePorClique={unidadePorClique}
           onDelete={removerContador}
-          index={index}
+          index={id}
         />
       ))}
     </div>
